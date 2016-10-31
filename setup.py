@@ -1,8 +1,12 @@
 from setuptools import find_packages
 from setuptools import setup
 
-with open('.version') as f:
-    VERSION = f.readline().strip()
+try:
+    with open('.version') as f:
+        VERSION = f.readline().strip()
+except IOError:
+    VERSION = 'unknown'
+
 setup(
     name='create',
     version=VERSION,
