@@ -1,2 +1,1 @@
 conf/ocf-create.conf etc/ocf-create
-debian/ocf-create-irc.service lib/systemd/system
