@@ -1,0 +1,5 @@
+#!/bin/bash
+set -exo pipefail
+cd /opt/create
+. venv/bin/activate
+exec python -m create.worker
