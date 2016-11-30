@@ -28,6 +28,9 @@ RUN virtualenv -ppython3 /opt/create/venv \
 COPY etc/sudoers /etc/sudoers.d/create
 COPY create /opt/create/create
 
+# TODO: remove this after ocflib no longer calls nscd
+RUN ln -s /bin/true /usr/sbin/nscd
+
 COPY services /opt/create/services
 RUN chown -R nobody:nogroup /opt/create
 USER nobody
