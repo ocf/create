@@ -47,6 +47,8 @@ def main():
             'celery',
             'worker',
             '-A', 'create.tasks',
+            # The default is to spawn one worker per CPU... meaning 32 or 48 workers on Marathon!
+            '-c', '4',
             '--without-gossip',
             '--without-mingle',
             '-l', args.log_level,
