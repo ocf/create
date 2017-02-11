@@ -6,7 +6,6 @@ cffi==1.9.1
 cracklib==2.9.3
 cryptography==1.7.2
 dnspython==1.15.0
-dnspython3==1.15.0
 idna==2.2
 Jinja2==2.9.5
 kombu==4.0.2
@@ -20,10 +19,9 @@ ptyprocess==0.5.1
 pyasn1==0.2.2
 pycparser==2.17
 pycrypto==2.6.1
-pycryptodome==3.4.5
 PyMySQL==0.7.9
 pysmi==0.0.7
-pysnmp==4.3.3
+pysnmp==4.3.2
 pytz==2016.10
 PyYAML==3.12
 redis==2.10.5
