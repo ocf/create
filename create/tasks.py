@@ -13,28 +13,11 @@ from configparser import ConfigParser
 from textwrap import dedent
 from traceback import format_exc
 
-import celery.backends.redis
-import redis
 from celery import Celery
 from celery.signals import setup_logging
 from ocflib.account.submission import AccountCreationCredentials
 from ocflib.account.submission import get_tasks
 from ocflib.misc.mail import send_problem_report
-# TODO: try to upstream this :\
-original = celery.backends.redis.RedisBackend._params_from_url
-
-
-def patched(*args, **kwargs):
-    result = original(*args, **kwargs)
-    result.update({
-        'connection_class': redis.SSLConnection,
-        'ssl_cert_reqs': ssl.CERT_NONE,
-    })
-    return result
-
-
-celery.backends.redis.RedisBackend._params_from_url = patched
-
 
 conf = ConfigParser()
 conf.read(os.environ['CREATE_CONFIG_FILE'])
@@ -45,6 +28,11 @@ celery = Celery(
 )
 # TODO: use ssl verification
 celery.conf.broker_use_ssl = {
+    'ssl_cert_reqs': ssl.CERT_NONE,
+}
+# `redis_backend_use_ssl` is an OCF patch which was proposed upstream:
+# https://github.com/celery/celery/pull/3831
+celery.conf.redis_backend_use_ssl = {
     'ssl_cert_reqs': ssl.CERT_NONE,
 }
 
