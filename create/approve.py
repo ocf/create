@@ -214,7 +214,8 @@ def main():
         try:
             password = prompt_for_new_password(
                 validator=lambda pwd: validate_password(
-                    account['user_name'], pwd),
+                    account['user_name'], pwd,
+                ),
             )
         except KeyboardInterrupt:
             # we want to allow cancelling during the "enter password" stage
