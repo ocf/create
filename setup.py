@@ -16,9 +16,7 @@ setup(
     author='Open Computing Facility',
     author_email='help@ocf.berkeley.edu',
     install_requires=[
-        # Celery 3.1.19 has a bug with Redis UNIX sockets that breaks create:
-        # https://github.com/celery/celery/issues/2903
-        'celery[redis]<3.1.18',
+        'celery[redis]<3.999',
         'ocflib',
         'pyyaml',
     ],
