@@ -19,7 +19,7 @@ autoversion:
 		--create --package "ocf-create" "Package for Debian."
 
 venv: autoversion vendor/venv-update requirements.txt setup.py
-	vendor/venv-update venv= -ppython3.4 venv install= -r requirements.txt -e .
+	vendor/venv-update venv= -ppython3 venv install= -r requirements.txt -e .
 
 .PHONY: cook-image
 cook-image:
