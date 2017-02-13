@@ -2,4 +2,7 @@
 set -euxo pipefail
 exec 2>&1
 cd /opt/create
-exec python -m create.healthcheck
+while :; do
+    python -m create.healthcheck
+    sleep 60
+done
