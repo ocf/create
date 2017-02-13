@@ -36,4 +36,4 @@ RUN chown -R nobody:nogroup /opt/create/services
 USER nobody
 WORKDIR /opt/create
 ENV PATH=/opt/create/venv/bin:$PATH
-CMD ["runsvdir", "services/create"]
+CMD ["runsv", "services/create"]
