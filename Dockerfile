@@ -10,6 +10,7 @@ RUN apt-get update \
         python3-dev \
         python3-pip \
         redis-tools \
+        runit \
         sudo \
         virtualenv \
     && apt-get clean \
@@ -29,7 +30,10 @@ COPY create /opt/create/create
 # TODO: remove this after ocflib no longer calls nscd
 RUN ln -s /bin/true /usr/sbin/nscd
 
+COPY services /opt/create/services
+RUN chown -R nobody:nogroup /opt/create/services
+
 USER nobody
 WORKDIR /opt/create
 ENV PATH=/opt/create/venv/bin:$PATH
-CMD ["/opt/create/venv/bin/python", "-m", "create.worker"]
+CMD ["runsvdir", "services/create"]

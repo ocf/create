@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euxo pipefail
+exec 2>&1
+cd /opt/create
+exec python -m create.worker
