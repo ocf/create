@@ -38,8 +38,13 @@ if (env.BRANCH_NAME == 'master') {
             }
 
             stage('deploy-to-prod') {
+                # TODO: these are not atomic
                 build job: 'marathon-deploy-app', parameters: [
-                    [$class: 'StringParameterValue', name: 'app', value: 'create'],
+                    [$class: 'StringParameterValue', name: 'app', value: 'create/worker'],
+                    [$class: 'StringParameterValue', name: 'version', value: version],
+                ]
+                build job: 'marathon-deploy-app', parameters: [
+                    [$class: 'StringParameterValue', name: 'app', value: 'create/healthcheck'],
                     [$class: 'StringParameterValue', name: 'version', value: version],
                 ]
             }
