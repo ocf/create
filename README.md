@@ -1,5 +1,6 @@
 # create
-[![Build Status](https://jenkins.ocf.berkeley.edu/buildStatus/icon?job=create-test)](https://jenkins.ocf.berkeley.edu/view/create-test/)
+
+[![Build Status](https://jenkins.ocf.berkeley.edu/buildStatus/icon?job=create/master)](https://jenkins.ocf.berkeley.edu/job/create/job/master/)
 
 Celery worker for account creation
 
