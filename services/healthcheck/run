@@ -3,6 +3,6 @@ set -euxo pipefail
 exec 2>&1
 cd /opt/create
 while :; do
-    python -m create.healthcheck
+    python -m create.global_healthcheck
     sleep 60
 done
