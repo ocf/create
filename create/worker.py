@@ -6,6 +6,7 @@ celery worker process.
 """
 import argparse
 import os
+import socket
 
 
 def main():
@@ -52,6 +53,11 @@ def main():
             '--without-gossip',
             '--without-mingle',
             '-l', args.log_level,
+
+            # We also listen on a queue named after the hostname so that the
+            # health check can be sure to hit this host.
+            # http://docs.celeryproject.org/en/latest/userguide/routing.html
+            '-Q', 'celery,{}'.format(socket.gethostname()),
         ) + extra_args,
     )
 

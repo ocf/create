@@ -1,17 +1,27 @@
-"""Check the status of this create worker.
-
-This runs the "status" task on a celery queue with the name of this hostname.
-http://docs.celeryproject.org/en/latest/userguide/routing.html#manual-routing
-
-If the healthcheck fails, Marathon will bring up additional instances and
-retire this one.
-"""
+"""Check the number of create workers."""
+import argparse
 import configparser
-import socket
 import ssl
+import time
 
 from celery import Celery
 from ocflib.account import submission
+
+
+def discover_workers(tasks, n):
+    workers = set()
+    latencies = []
+
+    for i in range(n):
+        start = time.time()
+
+        task = tasks.status.delay()
+        result = task.wait(timeout=5)
+        workers.add(result['host'])
+
+        latencies.append((time.time() - start) * 1000)
+
+    return workers, latencies
 
 
 def celery_app():
@@ -41,11 +51,24 @@ def celery_app():
     return celery
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        '--num-checks', '-n',
+        type=int, default=100,
+        help='number of status checks to run',
+    )
+    args = parser.parse_args(argv)
+
     tasks = submission.get_tasks(celery_app())
-    task = tasks.status.apply_async(queue=socket.gethostname(), args=())
-    result = task.wait(timeout=5)
-    print(result)
+    workers, latencies = discover_workers(tasks, args.num_checks)
+
+    print('{} workers: {}'.format(len(workers), sorted(workers)))
+    print('latencies: mean: {:.02f}ms; min: {:.02}ms; max: {:.02f}ms'.format(
+        sum(latencies) / len(latencies),
+        min(latencies),
+        max(latencies),
+    ))
 
 
 if __name__ == '__main__':
