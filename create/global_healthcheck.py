@@ -2,6 +2,7 @@
 import argparse
 import configparser
 import ssl
+import sys
 import time
 
 from celery import Celery
@@ -72,4 +73,4 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    exit(main())
+    sys.exit(main())

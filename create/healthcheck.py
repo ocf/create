@@ -9,6 +9,7 @@ retire this one.
 import configparser
 import socket
 import ssl
+import sys
 
 from celery import Celery
 from ocflib.account import submission
@@ -49,4 +50,4 @@ def main():
 
 
 if __name__ == '__main__':
-    exit(main())
+    sys.exit(main())
