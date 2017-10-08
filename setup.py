@@ -16,9 +16,7 @@ setup(
     author='Open Computing Facility',
     author_email='help@ocf.berkeley.edu',
     install_requires=[
-        # TODO: stop using our fork
-        # https://github.com/celery/celery/pull/3831
-        'ckuehl-celery[redis]==4.0.2.post1',
+        'celery[redis]',
         'ocflib',
         'pyyaml',
     ],
