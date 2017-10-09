@@ -19,6 +19,8 @@ from ocflib.account.submission import AccountCreationCredentials
 from ocflib.account.submission import get_tasks
 from ocflib.misc.mail import send_problem_report
 
+DEBUG_MODE = bool(os.environ.get('CREATE_DEBUG', ''))
+
 conf = ConfigParser()
 conf.read(os.environ['CREATE_CONFIG_FILE'])
 
@@ -51,8 +53,7 @@ creds = AccountCreationCredentials(
 
 # if in debug mode, disable celery logging so that stdin / stdout / stderr
 # don't get tampered with (otherwise, interactive debuggers won't work)
-if os.environ.get('CREATE_DEBUG', ''):
-    # pylint: disable=unused-argument
+if DEBUG_MODE:
     def no_logging(*args, **kwargs):
         pass
     setup_logging.connect(no_logging)
@@ -70,38 +71,39 @@ def failure_handler(exc, task_id, args, kwargs, einfo):
     if isinstance(exc, ValueError):
         return
 
-    try:
-        send_problem_report(
-            dedent(
-                """\
-            An exception occured in create:
+    if not DEBUG_MODE:
+        try:
+            send_problem_report(
+                dedent(
+                    """\
+                An exception occured in create:
 
-            {traceback}
+                {traceback}
 
-            Task Details:
-              * task_id: {task_id}
+                Task Details:
+                  * task_id: {task_id}
 
-            Try `journalctl -u ocf-create` for more details."""
-            ).format(
-                traceback=einfo,
-                task_id=task_id,
-                args=args,
-                kwargs=kwargs,
-                einfo=einfo,
-            ),
-        )
-    except Exception as ex:
-        print(ex)  # just in case it errors again here
-        send_problem_report(
-            dedent(
-                """\
-            An exception occured in create, but we errored trying to report it:
+                Try `journalctl -u ocf-create` for more details."""
+                ).format(
+                    traceback=einfo,
+                    task_id=task_id,
+                    args=args,
+                    kwargs=kwargs,
+                    einfo=einfo,
+                ),
+            )
+        except Exception as ex:
+            print(ex)  # just in case it errors again here
+            send_problem_report(
+                dedent(
+                    """\
+                An exception occured in create, but we errored trying to report it:
 
-            {traceback}
-            """
-            ).format(traceback=format_exc()),
-        )
-        raise
+                {traceback}
+                """
+                ).format(traceback=format_exc()),
+            )
+            raise
 
 
 tasks = get_tasks(celery, credentials=creds)

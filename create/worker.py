@@ -43,6 +43,19 @@ def main():
         os.environ['CREATE_DEBUG'] = '1'
 
     os.environ['CREATE_CONFIG_FILE'] = args.config
+
+    # We always listen on a queue named after the hostname so that the
+    # health check can be sure to hit this host.
+    # http://docs.celeryproject.org/en/latest/userguide/routing.html
+    queues = [socket.gethostname()]
+
+    # If not in dev mode, add us to the default queue. This allows staff to
+    # specify the hostname they're testing on to be sure to hit their instance
+    # of create, and also to make sure that real tasks don't hit their
+    # instance.
+    if not args.debug:
+        queues.append('celery')
+
     os.execvp(
         'celery',
         (
@@ -54,11 +67,7 @@ def main():
             '--without-gossip',
             '--without-mingle',
             '-l', args.log_level,
-
-            # We also listen on a queue named after the hostname so that the
-            # health check can be sure to hit this host.
-            # http://docs.celeryproject.org/en/latest/userguide/routing.html
-            '-Q', 'celery,{}'.format(socket.gethostname()),
+            '-Q', ','.join(queues),
         ) + extra_args,
     )
 
