@@ -34,14 +34,13 @@ def celery_app():
         broker=conf.get('celery', 'broker'),
         backend=conf.get('celery', 'backend'),
     )
-    # TODO: use ssl verification
     celery.conf.broker_use_ssl = {
-        'ssl_cert_reqs': ssl.CERT_NONE,
+        'ssl_ca_certs': '/etc/ssl/certs/ca-certificates.crt',
+        'ssl_cert_reqs': ssl.CERT_REQUIRED,
     }
-    # `redis_backend_use_ssl` is an OCF patch which was proposed upstream:
-    # https://github.com/celery/celery/pull/3831
     celery.conf.redis_backend_use_ssl = {
-        'ssl_cert_reqs': ssl.CERT_NONE,
+        'ssl_ca_certs': '/etc/ssl/certs/ca-certificates.crt',
+        'ssl_cert_reqs': ssl.CERT_REQUIRED,
     }
 
     # TODO: stop using pickle

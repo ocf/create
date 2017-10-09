@@ -26,12 +26,13 @@ celery = Celery(
     broker=conf.get('celery', 'broker'),
     backend=conf.get('celery', 'backend'),
 )
-# TODO: use ssl verification
 celery.conf.broker_use_ssl = {
-    'ssl_cert_reqs': ssl.CERT_NONE,
+    'ssl_ca_certs': '/etc/ssl/certs/ca-certificates.crt',
+    'ssl_cert_reqs': ssl.CERT_REQUIRED,
 }
 celery.conf.redis_backend_use_ssl = {
-    'ssl_cert_reqs': ssl.CERT_NONE,
+    'ssl_ca_certs': '/etc/ssl/certs/ca-certificates.crt',
+    'ssl_cert_reqs': ssl.CERT_REQUIRED,
 }
 
 # TODO: stop using pickle
