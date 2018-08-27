@@ -1,96 +1,95 @@
-if (env.BRANCH_NAME == 'master') {
-    properties([
-        pipelineTriggers([
-            upstream(
-                upstreamProjects: 'ocflib/master,dockers/master',
-                threshold: hudson.model.Result.SUCCESS,
-            ),
-        ]),
-    ])
-}
+def version
 
+pipeline {
+  // TODO: Make this cleaner: https://issues.jenkins-ci.org/browse/JENKINS-42643
+  triggers {
+    upstream(
+      upstreamProjects: (env.BRANCH_NAME == 'master' ? 'ocflib/master,dockers/master' : ''),
+      threshold: hudson.model.Result.SUCCESS,
+    )
+  }
 
-try {
-    node('slave') {
-        step([$class: 'WsCleanup'])
+  agent {
+    label 'slave'
+  }
 
-        stage('check-out-code') {
-            checkout scm
+  options {
+    ansiColor('xterm')
+    timeout(time: 1, unit: 'HOURS')
+    timestamps()
+  }
+
+  stages {
+    stage('check-gh-trust') {
+      steps {
+        checkGitHubAccess()
+
+        script {
+          version = new Date().format("yyyy-MM-dd-'T'HH-mm-ss")
         }
+      }
+    }
 
+    stage('parallel-test-cook') {
+      environment {
+        DOCKER_REVISION = "${version}"
+      }
+      parallel {
         stage('test') {
+          steps {
             sh 'make test'
+          }
         }
 
-        stash 'build'
-    }
-
-
-    if (env.BRANCH_NAME == 'master') {
-        def version = new Date().format("yyyy-MM-dd-'T'HH-mm-ss")
-        withEnv([
-            "DOCKER_REVISION=${version}",
-        ]) {
-            node('slave') {
-                step([$class: 'WsCleanup'])
-                unstash 'build'
-
-                stage('cook-prod-image') {
-                    sh 'make cook-image'
-                }
-
-                stash 'build'
-            }
-
-            node('deploy') {
-                step([$class: 'WsCleanup'])
-                unstash 'build'
-
-                stage('push-to-registry') {
-                    sh 'make push-image'
-                }
-
-                stage('deploy-to-prod') {
-                    // TODO: these are not atomic
-                    build job: 'marathon-deploy-app', parameters: [
-                        [$class: 'StringParameterValue', name: 'app', value: 'create/worker'],
-                        [$class: 'StringParameterValue', name: 'version', value: version],
-                    ]
-                    build job: 'marathon-deploy-app', parameters: [
-                        [$class: 'StringParameterValue', name: 'app', value: 'create/healthcheck'],
-                        [$class: 'StringParameterValue', name: 'version', value: version],
-                    ]
-                }
-            }
+        stage('cook-image') {
+          steps {
+            sh 'make cook-image'
+          }
         }
-    } else {
-        node('slave') {
-            step([$class: 'WsCleanup'])
-            unstash 'build'
-
-            stage('test-cook-image') {
-                sh 'make cook-image'
-            }
-
-            stash 'build'
-        }
+      }
     }
 
-} catch (err) {
-    def subject = "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Failure!"
-    def message = "${env.JOB_NAME} (#${env.BUILD_NUMBER}) failed: ${env.BUILD_URL}"
-
-    if (env.BRANCH_NAME == 'master') {
-        slackSend color: '#FF0000', message: message
-        mail to: 'root@ocf.berkeley.edu', subject: subject, body: message
-    } else {
-        mail to: emailextrecipients([
-            [$class: 'CulpritsRecipientProvider'],
-            [$class: 'DevelopersRecipientProvider']
-        ]), subject: subject, body: message
+    stage('push-to-registry') {
+      environment {
+        DOCKER_REVISION = "${version}"
+      }
+      when {
+        branch 'master'
+      }
+      agent {
+        label 'deploy'
+      }
+      steps {
+        sh 'make push-image'
+      }
     }
 
-    throw err
+    stage('deploy-to-prod') {
+      when {
+        branch 'master'
+      }
+      agent {
+        label 'deploy'
+      }
+      steps {
+        // TODO: Make these deploy and roll back together! (make it atomic)
+        // TODO: Also try to parallelize these if possible?
+        marathonDeployApp('create/worker', version)
+        marathonDeployApp('create/healthcheck', version)
+      }
+    }
+  }
+
+  post {
+    failure {
+      emailNotification()
+    }
+    always {
+      node(label: 'slave') {
+        ircNotification()
+      }
+    }
+  }
 }
 
 // vim: ft=groovy
