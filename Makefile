@@ -7,7 +7,7 @@ test: venv
 	venv/bin/pre-commit install -f --install-hooks
 
 venv: vendor/venv-update requirements.txt requirements-dev.txt
-	vendor/venv-update venv= -ppython3 venv install= -r requirements.txt -r requirements-dev.txt
+	vendor/venv-update venv= -ppython3.7 venv install= -r requirements.txt -r requirements-dev.txt
 
 .PHONY: cook-image
 cook-image:

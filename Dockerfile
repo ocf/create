@@ -7,9 +7,7 @@ RUN apt-get update \
         libcrack2-dev \
         libffi-dev \
         libssl-dev \
-        python3 \
-        python3-dev \
-        python3-pip \
+        python3.7-dev \
         redis-tools \
         runit \
         sudo \
@@ -20,7 +18,7 @@ RUN apt-get update \
 RUN install -d --owner=nobody /opt/create /opt/create/venv
 
 COPY requirements.txt /opt/create/
-RUN virtualenv -ppython3 /opt/create/venv \
+RUN virtualenv -ppython3.7 /opt/create/venv \
     && /opt/create/venv/bin/pip install pip==8.1.2 \
     && /opt/create/venv/bin/pip install \
         -r /opt/create/requirements.txt
