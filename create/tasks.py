@@ -41,11 +41,13 @@ celery.conf.result_serializer = 'pickle'
 celery.conf.accept_content = {'pickle'}
 
 
-creds = AccountCreationCredentials(**{
-    field:
-        conf.get(*field.split('_'))
-        for field in AccountCreationCredentials._fields
-})
+creds = AccountCreationCredentials(
+    **{
+        field:
+            conf.get(*field.split('_'))
+            for field in AccountCreationCredentials._fields
+    },
+)
 
 # if in debug mode, disable celery logging so that stdin / stdout / stderr
 # don't get tampered with (otherwise, interactive debuggers won't work)
@@ -69,8 +71,9 @@ def failure_handler(exc, task_id, args, kwargs, einfo):
         return
 
     try:
-        send_problem_report(dedent(
-            """\
+        send_problem_report(
+            dedent(
+                """\
             An exception occured in create:
 
             {traceback}
@@ -79,22 +82,25 @@ def failure_handler(exc, task_id, args, kwargs, einfo):
               * task_id: {task_id}
 
             Try `journalctl -u ocf-create` for more details."""
-        ).format(
-            traceback=einfo,
-            task_id=task_id,
-            args=args,
-            kwargs=kwargs,
-            einfo=einfo,
-        ))
+            ).format(
+                traceback=einfo,
+                task_id=task_id,
+                args=args,
+                kwargs=kwargs,
+                einfo=einfo,
+            ),
+        )
     except Exception as ex:
         print(ex)  # just in case it errors again here
-        send_problem_report(dedent(
-            """\
+        send_problem_report(
+            dedent(
+                """\
             An exception occured in create, but we errored trying to report it:
 
             {traceback}
             """
-        ).format(traceback=format_exc()))
+            ).format(traceback=format_exc()),
+        )
         raise
 
 

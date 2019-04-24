@@ -64,11 +64,13 @@ def main(argv=None):
     workers, latencies = discover_workers(tasks, args.num_checks)
 
     print('{} workers: {}'.format(len(workers), sorted(workers)))
-    print('latencies: mean: {:.02f}ms; min: {:.02}ms; max: {:.02f}ms'.format(
-        sum(latencies) / len(latencies),
-        min(latencies),
-        max(latencies),
-    ))
+    print(
+        'latencies: mean: {:.02f}ms; min: {:.02}ms; max: {:.02f}ms'.format(
+            sum(latencies) / len(latencies),
+            min(latencies),
+            max(latencies),
+        ),
+    )
 
 
 if __name__ == '__main__':

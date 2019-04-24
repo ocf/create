@@ -1,7 +1,7 @@
 exclude: (^vendor/)
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks.git
-    rev: v2.1.0
+    rev: v2.2.1
     hooks:
     -   id: check-added-large-files
     -   id: check-docstring-first
@@ -21,7 +21,7 @@ repos:
     -   id: sort-simple-yaml
     -   id: trailing-whitespace
 -   repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v1.4.3
+    rev: v1.4.4
     hooks:
     -   id: autopep8
 -   repo: https://gitlab.com/pycqa/flake8
@@ -38,12 +38,12 @@ repos:
     -   id: remove-tabs
         files: \.py$
 -   repo: https://github.com/asottile/pyupgrade
-    sha: v1.16.1
+    rev: v1.16.1
     hooks:
         -   id: pyupgrade
             args: ['--py36-plus']
 -   repo: https://github.com/asottile/add-trailing-comma
-    sha: v0.7.1
+    rev: v1.0.0
     hooks:
          -   id: add-trailing-comma
              args: ['--py36-plus']
