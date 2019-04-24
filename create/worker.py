@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.7
 """Celery worker wrapper.
 
 Reads options from a config file (or command-line arguments), then execs a
