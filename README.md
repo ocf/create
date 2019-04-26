@@ -1,6 +1,7 @@
 # create
 
 [![Build Status](https://jenkins.ocf.berkeley.edu/buildStatus/icon?job=create/master)](https://jenkins.ocf.berkeley.edu/job/create/job/master/)
+[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 
 Celery worker for account creation
 

@@ -2,9 +2,13 @@ DOCKER_REVISION ?= testing-$(USER)
 DOCKER_TAG = docker-push.ocf.berkeley.edu/create:$(DOCKER_REVISION)
 
 .PHONY: test
-test: venv
+test: venv mypy
 	venv/bin/pre-commit run --all-files
 	venv/bin/pre-commit install -f --install-hooks
+
+.PHONY: mypy
+mypy: venv
+	venv/bin/mypy -p create
 
 venv: vendor/venv-update requirements.txt requirements-dev.txt
 	vendor/venv-update venv= -ppython3.7 venv install= -r requirements.txt -r requirements-dev.txt

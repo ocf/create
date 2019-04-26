@@ -7,6 +7,7 @@ celery worker process.
 import argparse
 import os
 import socket
+from typing import Tuple
 
 
 def main():
@@ -35,7 +36,7 @@ def main():
         help='Whether to run in debug mode (allows interactive debuggers).',
     )
     args = parser.parse_args()
-    extra_args = ()
+    extra_args: Tuple[str, ...] = ()
 
     if args.debug:
         extra_args += ('-P', 'solo')
