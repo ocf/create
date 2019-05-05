@@ -2,4 +2,4 @@
 set -euxo pipefail
 exec 2>&1
 cd /opt/create
-exec python -m create.worker
+exec python -m create.worker -c dev-create.conf --debug

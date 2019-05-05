@@ -1,0 +1,59 @@
+# Deployment for create and redis service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: create-deployment
+  labels:
+    app: create
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: create
+  template:
+      metadata:
+        labels:
+          app: create
+      spec:
+        containers:
+          - name: create-worker
+            image: "docker.ocf.berkeley.edu/create:testing-wporr"
+            ports:
+              - containerPort: 6378
+            resources:
+              limits:
+                cpu: 750m
+                memory: 512Mi
+            volumeMounts:
+              - mountPath: /home
+                name: nfs-export-home
+              - mountPath: /services
+                name: nfs-export-services
+              - mountPath: /etc/ocf-create
+                name: create-secrets
+                readOnly: true
+            livenessProbe:
+              exec:
+                command:
+                - python
+                - '-m'
+                - 'create.healthcheck'
+              initialDelaySeconds: 15
+              periodSeconds: 15
+        volumes:
+          - name: nfs-export-home
+            nfs:
+              server: dataloss
+              path: /opt/homes/home
+          - name: nfs-export-services
+            nfs:
+              server: dataloss
+              path: /opt/homes/services
+          - name: create-secrets
+            hostPath:
+              path: /opt/share/docker/secrets/create
+              type: Directory
+        dnsPolicy: ClusterFirst
+        dnsConfig:
+          searches:
+            - ocf.berkeley.edu
