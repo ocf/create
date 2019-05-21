@@ -6,6 +6,7 @@ http://docs.celeryproject.org/en/latest/userguide/routing.html#manual-routing
 If the healthcheck fails, Marathon will bring up additional instances and
 retire this one.
 """
+import argparse
 import configparser
 import socket
 import ssl
@@ -15,10 +16,10 @@ from celery import Celery
 from ocflib.account import submission
 
 
-def celery_app():
+def celery_app(conf_file):
     # TODO: reduce duplication with create.tasks
     conf = configparser.ConfigParser()
-    conf.read('/etc/ocf-create/ocf-create.conf')
+    conf.read(conf_file)
 
     celery = Celery(
         broker=conf.get('celery', 'broker').replace('redis://', 'rediss://'),
@@ -42,7 +43,19 @@ def celery_app():
 
 
 def main():
-    tasks = submission.get_tasks(celery_app())
+    parser = argparse.ArgumentParser(
+        description='Check the status of this create worker.',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        '-c',
+        '--config',
+        default='/etc/ocf-create/ocf-create.conf',
+        help='Config file to read from.',
+    )
+    args = parser.parse_args()
+
+    tasks = submission.get_tasks(celery_app(args.config))
     task = tasks.status.apply_async(queue=socket.gethostname(), args=())
     result = task.wait(timeout=5)
     print(result)

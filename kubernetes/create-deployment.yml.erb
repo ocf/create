@@ -1,4 +1,3 @@
-# Deployment for create and redis service
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,7 +16,7 @@ spec:
       spec:
         containers:
           - name: create-worker
-            image: "docker.ocf.berkeley.edu/create:testing-wporr"
+            image: "docker.ocf.berkeley.edu/create:<%= version %>"
             ports:
               - containerPort: 6378
             resources:
@@ -32,6 +31,14 @@ spec:
               - mountPath: /etc/ocf-create
                 name: create-secrets
                 readOnly: true
+            readinessProbe:
+              exec:
+                command:
+                - python
+                - '-m'
+                - 'create.healthcheck'
+              initialDelaySeconds: 15
+              periodSeconds: 15
             livenessProbe:
               exec:
                 command:
@@ -40,6 +47,7 @@ spec:
                 - 'create.healthcheck'
               initialDelaySeconds: 15
               periodSeconds: 15
+
         volumes:
           - name: nfs-export-home
             nfs:

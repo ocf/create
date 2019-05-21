@@ -24,8 +24,6 @@ RUN virtualenv -ppython3.7 /opt/create/venv \
         -r /opt/create/requirements.txt
 
 COPY etc/sudoers /etc/sudoers.d/create
-# Added for dev-wporr
-COPY etc/dev-create.conf /opt/create/
 COPY create /opt/create/create
 
 # TODO: remove this after ocflib no longer calls nscd
