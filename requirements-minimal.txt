@@ -1,3 +1,6 @@
-celery[redis]
+# TODO: Unpin celery after the change in
+# https://github.com/celery/celery/pull/5985 is released in a version
+# https://groups.google.com/d/msg/celery-users/mICtIfkCO3Y/aPdBIcBFAQAJ
+celery[redis]==4.4.0
 ocflib
 pyyaml
