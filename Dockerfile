@@ -19,7 +19,7 @@ RUN install -d --owner=nobody /opt/create /opt/create/venv
 
 COPY requirements.txt /opt/create/
 RUN virtualenv -ppython3.7 /opt/create/venv \
-    && /opt/create/venv/bin/pip install pip==8.1.2 \
+    && /opt/create/venv/bin/pip install pip==20.0.2 \
     && /opt/create/venv/bin/pip install \
         -r /opt/create/requirements.txt
 

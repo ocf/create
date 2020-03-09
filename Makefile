@@ -25,7 +25,7 @@ push-image:
 .PHONY: dev
 dev: cook-image
 	docker run --rm \
-		-v /etc/ocf-create-new:/etc/ocf-create:ro \
+		-v /etc/ocf-create:/etc/ocf-create:ro \
 		$(DOCKER_TAG)
 
 .PHONY: update-requirements
