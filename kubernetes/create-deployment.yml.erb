@@ -51,11 +51,11 @@ spec:
         volumes:
           - name: nfs-export-home
             nfs:
-              server: dataloss
+              server: homes
               path: /opt/homes/home
           - name: nfs-export-services
             nfs:
-              server: dataloss
+              server: services
               path: /opt/homes/services
           - name: create-secrets
             hostPath:
