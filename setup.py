@@ -4,7 +4,7 @@ from setuptools import setup
 try:
     with open('.version') as f:
         VERSION = f.readline().strip()
-except IOError:
+except OSError:
     VERSION = 'unknown'
 
 setup(
