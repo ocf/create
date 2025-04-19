@@ -1,4 +1,4 @@
-FROM docker.ocf.berkeley.edu/theocf/debian:stretch
+FROM theocf/debian:bullseye-py
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -7,7 +7,6 @@ RUN apt-get update \
         libcrack2-dev \
         libffi-dev \
         libssl-dev \
-        python3.7-dev \
         redis-tools \
         runit \
         sudo \
@@ -18,8 +17,8 @@ RUN apt-get update \
 RUN install -d --owner=nobody /opt/create /opt/create/venv
 
 COPY requirements.txt /opt/create/
-RUN virtualenv -ppython3.7 /opt/create/venv \
-    && /opt/create/venv/bin/pip install pip==20.0.2 \
+RUN virtualenv -ppython3.9 /opt/create/venv \
+    && /opt/create/venv/bin/pip install pip==25.0.1 \
     && /opt/create/venv/bin/pip install \
         -r /opt/create/requirements.txt
 

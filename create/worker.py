@@ -60,8 +60,8 @@ def main():
         'celery',
         (
             'celery',
-            'worker',
             '-A', 'create.tasks',
+            'worker', # As of celery 5.0, global args need to go before the subcommand
             # The default is to spawn one worker per CPU... meaning 32 or 48 workers on Marathon!
             '-c', '4',
             '--without-gossip',
