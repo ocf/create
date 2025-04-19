@@ -7,6 +7,7 @@ RUN apt-get update \
         libcrack2-dev \
         libffi-dev \
         libssl-dev \
+        python3.9-dev \
         redis-tools \
         runit \
         sudo \
