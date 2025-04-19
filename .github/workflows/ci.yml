@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - newkube-migration
 
 jobs:
   transpire-ci:
