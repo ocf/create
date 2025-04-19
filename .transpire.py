@@ -4,7 +4,7 @@ from transpire.resources import Deployment, Secret, Service
 from transpire.types import Image, ContainerRegistry
 from transpire.utils import get_image_tag
 
-name = "transpire"
+name = "create"
 auto_sync = True
 
 
