@@ -15,7 +15,7 @@ def images():
 def add_probes(dep):
     dep.obj.spec.template.spec.containers[0].readiness_probe = {
         "exec": {
-            "command": ["python", "\'-m\'", "\'create.healthcheck\'"],
+            "command": ["python", "-m", "create.healthcheck"],
         },
         "initialDelaySeconds": 15,
         "periodSeconds": 15,
@@ -23,7 +23,7 @@ def add_probes(dep):
 
     dep.obj.spec.template.spec.containers[0].liveness_probe = {
         "exec": {
-            "command": ["python", "\'-m\'", "\'create.healthcheck\'"],
+            "command": ["python", "-m", "create.healthcheck"],
         },
         "initialDelaySeconds": 15,
         "periodSeconds": 15,
