@@ -40,7 +40,7 @@ def add_volumes(dep):
     dep.obj.spec.template.spec.containers[0].volume_mounts = [
         {"name": "nfs-export-home", "mountPath": "/home"},
         {"name": "nfs-export-services", "mountPath": "/services"},
-        {"name": "secrets", "mountPath": "/etc/ocf-create", "readOnly": True},
+        {"name": "secrets", "mountPath": "/etc/ocf-create"},
     ]
 
 
@@ -68,9 +68,9 @@ def objects():
         name="create",
         string_data={
             "create.key": "",
-            "create.keytab": "",
+            "create-keytab-base64": "",
             "create.pub": "",
-            "create-redis.key": "",
+            "create-redis-base64": "",
             "ocf-create.conf": "",
         },
     )
