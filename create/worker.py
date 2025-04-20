@@ -5,6 +5,7 @@ Reads options from a config file (or command-line arguments), then execs a
 celery worker process.
 """
 import argparse
+import base64
 import os
 import socket
 from typing import Tuple
@@ -55,6 +56,22 @@ def main():
     # instance.
     if not args.debug:
         queues.append('celery')
+
+    # Decode secrets stored in base64
+    with open('/etc/ocf-create/create-keytab-base64', 'rt') as f:
+        text = f.read()
+        decoded_bytes = base64.b64decode(text)
+
+        with open('/etc/ocf-create/create.keytab', 'wb') as fw:
+            fw.write(decoded_bytes)
+
+    with open('/etc/ocf-create/create-redis-base64', 'rt') as f:
+        text = f.read()
+        decoded_bytes = base64.b64decode(text)
+
+        with open('/etc/ocf-create/create-redis.key', 'wb') as fw:
+            fw.write(decoded_bytes)
+
 
     os.execvp(
         'celery',
