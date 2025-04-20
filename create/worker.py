@@ -62,14 +62,14 @@ def main():
         text = f.read()
         decoded_bytes = base64.b64decode(text)
 
-        with open('/etc/ocf-create/create.keytab', 'wb') as fw:
+        with open('/opt/create/create.keytab', 'wb') as fw:
             fw.write(decoded_bytes)
 
     with open('/etc/ocf-create/create-redis-base64', 'rt') as f:
         text = f.read()
         decoded_bytes = base64.b64decode(text)
 
-        with open('/etc/ocf-create/create-redis.key', 'wb') as fw:
+        with open('/opt/create/create-redis.key', 'wb') as fw:
             fw.write(decoded_bytes)
 
 
