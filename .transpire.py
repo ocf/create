@@ -32,8 +32,8 @@ def add_probes(dep):
 
 def add_volumes(dep):
     dep.obj.spec.template.spec.volumes = [
-        {"name": "nfs-export-home", "nfs": {"path": "/opt/homes/home", "server": "homes"}},
-        {"name": "nfs-export-services", "nfs": {"path": "/opt/homes/services", "server": "services"}},
+        {"name": "nfs-export-home", "nfs": {"path": "/opt/homes/home", "server": "homes.ocf.berkeley.edu"}},
+        {"name": "nfs-export-services", "nfs": {"path": "/opt/homes/services", "server": "services.ocf.berkeley.edu"}},
         {"name": "secrets", "secret": {"secretName": "create"}},
     ]
 
