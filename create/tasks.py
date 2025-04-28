@@ -83,7 +83,7 @@ def failure_handler(exc, task_id, args, kwargs, einfo):
                 Task Details:
                   * task_id: {task_id}
 
-                Try `journalctl -u ocf-create` for more details."""
+                Try `journalctl -u ocf-create` for more details.""",
                 ).format(
                     traceback=einfo,
                     task_id=task_id,
@@ -100,7 +100,7 @@ def failure_handler(exc, task_id, args, kwargs, einfo):
                 An exception occured in create, but we errored trying to report it:
 
                 {traceback}
-                """
+                """,
                 ).format(traceback=format_exc()),
             )
             raise
