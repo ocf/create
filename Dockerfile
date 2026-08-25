@@ -1,4 +1,4 @@
-FROM python:3.9-slim-bookworm
+FROM python:3.11-slim-bookworm
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -7,7 +7,7 @@ RUN apt-get update \
         libcrack2-dev \
         libffi-dev \
         libssl-dev \
-        python3.9-dev \
+        python3.11-dev \
         redis-tools \
         runit \
         sudo \
@@ -18,8 +18,8 @@ RUN apt-get update \
 RUN install -d --owner=nobody /opt/create /opt/create/venv
 
 COPY requirements.txt /opt/create/
-RUN virtualenv -ppython3.9 /opt/create/venv \
-    && /opt/create/venv/bin/pip install pip==25.0.1 \
+RUN virtualenv -ppython3.11 /opt/create/venv \
+    && /opt/create/venv/bin/pip install pip==26.2.1 \
     && /opt/create/venv/bin/pip install \
         -r /opt/create/requirements.txt
 
