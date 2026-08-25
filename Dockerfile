@@ -1,4 +1,4 @@
-FROM python:3.11-slim-bookworm
+FROM theocf/debian:bookworm
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
