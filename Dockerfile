@@ -1,4 +1,4 @@
-FROM theocf/debian:bullseye-py
+FROM python:3.9-slim-bookworm
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
