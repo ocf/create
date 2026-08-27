@@ -1,6 +1,6 @@
 FROM theocf/debian:bullseye-py
 
-RUN sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list
+RUN sed -i 's|mirrors.ocf.berkeley.edu.debian. bullseye-backports|archive.debian.org/debian bullseye-backports|g' /etc/apt/sources.list
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         build-essential \
