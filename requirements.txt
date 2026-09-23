@@ -21,7 +21,7 @@ Jinja2==3.1.6
 kombu==5.5.3
 ldap3==2.9.1
 MarkupSafe==3.0.2
-ocflib==2024.4.23
+ocflib==2026.9.23
 pexpect==4.9.0
 ply==3.11
 prompt_toolkit==3.0.51
