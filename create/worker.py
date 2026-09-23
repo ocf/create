@@ -72,6 +72,13 @@ def main():
         with open('/opt/create/create-redis.key', 'wb') as fw:
             fw.write(decoded_bytes)
 
+    with open('/etc/ocf-create/ucbldap.passwd', 'rt') as f:
+        text = f.read()
+        decoded_bytes = base64.b64decode(text)
+
+        with open('/etc/ucbldap.passwd', 'wb') as fw:
+            fw.write(decoded_bytes)
+
 
     os.execvp(
         'celery',
