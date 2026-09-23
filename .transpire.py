@@ -72,6 +72,7 @@ def objects():
             "create.pub": "",
             "create-redis-base64": "",
             "ocf-create.conf": "",
+            "ucbldap.passwd": "",
         },
     )
 
