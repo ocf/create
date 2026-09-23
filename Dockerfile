@@ -30,6 +30,8 @@ COPY create /opt/create/create
 # TODO: remove this after ocflib no longer calls nscd
 RUN ln -s /bin/true /usr/sbin/nscd
 
+RUN ln -s /etc/ocf-create/ucbldap.passwd /etc/ucbldap.passwd
+
 COPY services /opt/create/services
 RUN chown -R nobody:nogroup /opt/create/services
 
