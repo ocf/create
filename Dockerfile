@@ -1,6 +1,9 @@
 FROM theocf/debian:bullseye-py
 
-RUN sed -i 's|mirrors.ocf.berkeley.edu.debian. bullseye-backports|archive.debian.org/debian bullseye-backports|g' /etc/apt/sources.list
+RUN echo "deb http://deb.freexian.com/extended-lts/ bullseye main contrib non-free" > /etc/apt/sources.list
+COPY freexian-archive-keyring.deb /etc/apt
+RUN dpkg -i /etc/apt/freexian-archive-keyring.deb
+
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         build-essential \
